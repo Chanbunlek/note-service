@@ -110,23 +110,22 @@ public class NoteRepository : INoteRepository
 
         string queryStr = @"
         UPDATE note
-            SET Title = @Title,
-                Content = @Content,
-                Updated_At = GETDATE()
+            SET title = @Title,
+                content = @Content,
+                updated_at = GETDATE()
             OUTPUT inserted.Id, inserted.Title, inserted.Content, inserted.Created_At, inserted.Updated_At
             WHERE Id = @Id
             ";
 
 
         var command = new SqlCommand(queryStr, connector);
-        command.Parameters.AddWithValue("@title", request.Title);
-        command.Parameters.AddWithValue("@content", request.Content);
+        command.Parameters.AddWithValue("@Title", request.Title);
+        command.Parameters.AddWithValue("@Content", request.Content);
         command.Parameters.AddWithValue("@Id", id);
 
         var row = command.ExecuteReader();
-        connector.Close();
 
-        if (row != null)
+        if (row.Read())
         {
             return new NoteResponseDTO(
                 row.GetInt32(0),
@@ -136,6 +135,7 @@ public class NoteRepository : INoteRepository
                 row.GetDateTime(4)
             );
         }
+
         return null;
     }
 
