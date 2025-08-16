@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using TheFirstProject.DBConnection;
 using TheFirstProject.Repository;
 using TheFirstProject.Utils;
