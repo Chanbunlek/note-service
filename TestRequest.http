@@ -1,0 +1,14 @@
+###
+GET http://localhost:5152/response
+
+###
+GET http://localhost:5152/response/2
+
+###
+PUT http://localhost:5152/response/3
+Content-Type: application/json
+
+{
+    "name": "Sample Request",
+    "description": "This is a sample request description."
+}
