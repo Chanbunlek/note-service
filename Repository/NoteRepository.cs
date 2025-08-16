@@ -2,17 +2,17 @@ using TheFirstProject.DBConnection;
 using TheFirstProject.Models;
 using TheFirstProject.Dtos;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Http.HttpResults;
+using TheFirstProject.Mappers;
 
 namespace TheFirstProject.Repository;
 
 public interface INoteRepository
 {
-    List<Note> GetAll();
+    List<NoteResponseDTO> GetAll();
     NoteResponseDTO? GetById(int id);
     NoteResponseDTO? Add(NoteRequestDTO request);
     NoteResponseDTO? Update(int id, NoteRequestDTO request);
-    // bool Delete(int id);
+    bool Delete(int id);
 }
 
 public class NoteRepository : INoteRepository
@@ -24,7 +24,7 @@ public class NoteRepository : INoteRepository
         _connector = connector;
     }
 
-    public List<Note> GetAll()
+    public List<NoteResponseDTO> GetAll()
     {
         List<Note> notes = new List<Note>();
         SqlConnection connector = _connector.GetConnection();
@@ -50,7 +50,8 @@ public class NoteRepository : INoteRepository
         }
         connector.Close();
 
-        return notes;
+        return notes
+            .Select(NoteMapper.toResponse).ToList();
     }
 
 
@@ -149,11 +150,20 @@ public class NoteRepository : INoteRepository
         return null;
     }
 
-    // public bool Delete(int id)
-    // {
-    //     var note = GetById(id);
-    //     if (note == null) return false;
-    //     _notes.Remove(note);
-    //     return true;
-    // }
+    public bool Delete(int id)
+    {
+        SqlConnection connector = _connector.GetConnection();
+
+        GetById(id);
+
+        String queryStr = @"DELETE FROM note WHERE id = @id";
+
+        connector.Open();
+
+        var command = new SqlCommand(queryStr, connector);
+        command.Parameters.AddWithValue("@id", id);
+        int row = command.ExecuteNonQuery();
+
+        return row > 0;
+    }
 }

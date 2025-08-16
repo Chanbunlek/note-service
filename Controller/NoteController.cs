@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using TheFirstProject.Repository;
 using TheFirstProject.Dtos;
 using TheFirstProject.Models;
+using TheFirstProject.Utils;
+using Azure;
 
 namespace TheFirstProject.Controller;
 
 [ApiController]
 [Route("api/notes")]
-public class NotesController : ControllerBase
+public class NotesController
 {
     private readonly INoteRepository _repo;
 
@@ -17,37 +19,36 @@ public class NotesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Note>> GetAll()
+    public ActionResult<ResponseMsg<List<NoteResponseDTO>>> GetAll()
     {
-        return Ok(_repo.GetAll());
+        return Responses.Ok(_repo.GetAll());
     }
 
     [HttpGet("{id:int}")]
-    public ActionResult<NoteResponseDTO> GetById(int id)
+    public ActionResult<ResponseMsg<NoteResponseDTO>> GetById(int id)
     {
         var note = _repo.GetById(id);
-        if (note == null) return NotFound();
-        return Ok(note);
+        // if (note == null)
+        return Responses.Ok(note);
     }
 
     [HttpPost("create")]
-    public ActionResult<NoteResponseDTO> Create(NoteRequestDTO request)
+    public ActionResult<ResponseMsg<NoteResponseDTO>> Create(NoteRequestDTO request)
     {
-        return Ok(_repo.Add(request));
+        return Responses.Ok(_repo.Add(request));
     }
 
     [HttpPut("update/{id:int}")]
-    public ActionResult<NoteResponseDTO> Update(int id, NoteRequestDTO request)
+    public ActionResult<ResponseMsg<NoteResponseDTO>> Update(int id, NoteRequestDTO request)
     {
         var updated = _repo.Update(id, request);
-        if (updated == null) return NotFound();
-        return Ok(updated);
+        // if (updated == null) return NotFound();
+        return Responses.Ok(updated);
     }
 
-    // [HttpDelete("delete/{id:int}")]
-    // public IActionResult Delete(int id)
-    // {
-    //     var deleted = _repo.Delete(id);
-    //     return deleted ? Ok() : NotFound();
-    // }
+    [HttpDelete("delete/{id:int}")]
+    public ActionResult<ResponseMsg<bool>> Delete(int id)
+    {
+        return Responses.Ok(_repo.Delete(id));
+    }
 }
