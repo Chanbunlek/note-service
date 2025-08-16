@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TheFirstProject.Repository;
 using TheFirstProject.Dtos;
-using TheFirstProject.Models;
 using TheFirstProject.Utils;
 using Azure;
 
@@ -19,30 +18,27 @@ public class NotesController
     }
 
     [HttpGet]
-    public ActionResult<ResponseMsg<List<NoteResponseDTO>>> GetAll()
+    public ActionResult<ResponseMsg<List<NoteResponseDTO>>> GetAll([FromQuery] string? title)
     {
-        return Responses.Ok(_repo.GetAll());
+        return Responses.Ok(_repo.GetAll(title));
     }
 
     [HttpGet("{id:int}")]
-    public ActionResult<ResponseMsg<NoteResponseDTO>> GetById(int id)
+    public ActionResult<ResponseMsg<NoteResponseDTO?>> GetById(int id)
     {
-        var note = _repo.GetById(id);
-        return Responses.Ok(note);
+        return Responses.Ok(_repo.GetById(id));
     }
 
     [HttpPost("create")]
-    public ActionResult<ResponseMsg<NoteResponseDTO>> Create(NoteRequestDTO request)
+    public ActionResult<ResponseMsg<NoteResponseDTO?>> Create(NoteRequestDTO request)
     {
         return Responses.Ok(_repo.Add(request));
     }
 
     [HttpPut("update/{id:int}")]
-    public ActionResult<ResponseMsg<NoteResponseDTO>> Update(int id, NoteRequestDTO request)
+    public ActionResult<ResponseMsg<NoteResponseDTO?>> Update(int id, NoteRequestDTO request)
     {
-        var updated = _repo.Update(id, request);
-        // if (updated == null) return NotFound();
-        return Responses.Ok(updated);
+        return Responses.Ok(_repo.Update(id, request));
     }
 
     [HttpDelete("delete/{id:int}")]

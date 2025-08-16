@@ -9,7 +9,7 @@ namespace TheFirstProject.Repository;
 
 public interface INoteRepository
 {
-    List<NoteResponseDTO> GetAll();
+    List<NoteResponseDTO> GetAll(string? name);
     NoteResponseDTO? GetById(int id);
     NoteResponseDTO? Add(NoteRequestDTO request);
     NoteResponseDTO? Update(int id, NoteRequestDTO request);
@@ -25,30 +25,33 @@ public class NoteRepository : INoteRepository
         _connector = connector;
     }
 
-    public List<NoteResponseDTO> GetAll()
+    public List<NoteResponseDTO> GetAll(string? title)
     {
         List<Note> notes = new List<Note>();
         SqlConnection connector = _connector.GetConnection();
         connector.Open();
 
-        string queryStr = "SELECT id, title, content, created_at, updated_at FROM note";
+        string queryStr = $"SELECT id, title, content, created_at, updated_at FROM note";
+
+        if (!string.IsNullOrEmpty(title))
+            queryStr += $" WHERE title LIKE '%{title}%'";
 
         using (var command = new SqlCommand(queryStr, connector))
-        {
-            using (var reader = command.ExecuteReader())
             {
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    notes.Add(new Note(
-                        reader.GetInt32(0),
-                        reader.GetString(1),
-                        reader.GetString(2),
-                        reader.GetDateTime(3),
-                        reader.GetDateTime(4)
-                    ));
+                    while (reader.Read())
+                    {
+                        notes.Add(new Note(
+                            reader.GetInt32(0),
+                            reader.GetString(1),
+                            reader.GetString(2),
+                            reader.GetDateTime(3),
+                            reader.GetDateTime(4)
+                        ));
+                    }
                 }
             }
-        }
         connector.Close();
 
         return notes
