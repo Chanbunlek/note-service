@@ -39,11 +39,11 @@ public class NoteRepository : INoteRepository
                 while (reader.Read())
                 {
                     notes.Add(new Note(
-                        reader.GetInt32(0), // Id
-                        reader.GetString(1), // Title
-                        reader.GetString(2), // Content
-                        reader.GetDateTime(3), // CreatedAt
-                        reader.GetDateTime(4)  // UpdatedAt
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetDateTime(3),
+                        reader.GetDateTime(4)
                     ));
                 }
             }
@@ -70,11 +70,11 @@ public class NoteRepository : INoteRepository
                 if (reader.Read())
                 {
                     return new NoteResponseDTO(
-                        reader.GetInt32(0), // Id
-                        reader.GetString(1), // Title
-                        reader.GetString(2), // Content
-                        reader.GetDateTime(3), // CreatedAt
-                        reader.GetDateTime(4)  // UpdatedAt
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetDateTime(3),
+                        reader.GetDateTime(4)
                     );
                 }
             }
@@ -90,17 +90,28 @@ public class NoteRepository : INoteRepository
         SqlConnection connector = _connector.GetConnection();
         connector.Open();
 
-        string queryStr = "INSERT INTO note (Title, Content) VALUES (@Title, @Content) OUTPUT inserted.Id, inserted.Title, inserted.Content, inserted.Created_At, inserted.Updated_At";
+        string queryStr = @"INSERT INTO note (Title, Content)
+                            OUTPUT inserted.Id, inserted.Title, inserted.Content, inserted.Created_At, inserted.Updated_At
+                            VALUES (@Title, @Content)";
 
         var command = new SqlCommand(queryStr, connector);
         command.Parameters.AddWithValue("@Title", request.Title);
         command.Parameters.AddWithValue("@Content", request.Content);
 
-        int row = command.ExecuteScalar() as int? ?? 0;
+        var row = command.ExecuteReader();
 
-        connector.Close();
+        if (row.Read())
+        {
+            return new NoteResponseDTO(
+                row.GetInt32(0),
+                row.GetString(1),
+                row.GetString(2),
+                row.GetDateTime(3),
+                row.GetDateTime(4)
+            );
+        }
 
-        return GetById(row);
+        return null;
     }
 
     public NoteResponseDTO? Update(int id, NoteRequestDTO request)
@@ -116,7 +127,6 @@ public class NoteRepository : INoteRepository
             OUTPUT inserted.Id, inserted.Title, inserted.Content, inserted.Created_At, inserted.Updated_At
             WHERE Id = @Id
             ";
-
 
         var command = new SqlCommand(queryStr, connector);
         command.Parameters.AddWithValue("@Title", request.Title);
