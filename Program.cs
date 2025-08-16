@@ -26,6 +26,7 @@ builder.Services.AddCors(
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
