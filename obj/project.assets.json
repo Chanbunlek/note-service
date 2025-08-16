@@ -2109,9 +2109,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\TheFirstProject.csproj",
-      "projectName": "TheFirstProject",
-      "projectPath": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\TheFirstProject.csproj",
+      "projectUniqueName": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\NoteService.csproj",
+      "projectName": "NoteService",
+      "projectPath": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\NoteService.csproj",
       "packagesPath": "C:\\Users\\chanb\\.nuget\\packages\\",
       "outputPath": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\obj\\",
       "projectStyle": "PackageReference",

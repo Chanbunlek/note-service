@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x1vNWVbwQ5g=",
+  "dgSpecHash": "ZMJFYzdjiKM=",
   "success": true,
-  "projectFilePath": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\TheFirstProject.csproj",
+  "projectFilePath": "D:\\Programming\\Z_Projects\\ASP\\note-app\\note-service\\NoteService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\chanb\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\chanb\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
