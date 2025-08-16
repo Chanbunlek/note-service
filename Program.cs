@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using TheFirstProject.DBConnection;
 using TheFirstProject.Repository;
 using TheFirstProject.Utils;
@@ -10,6 +11,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IConnector>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
+
+builder.Services.AddCors(
+    cors =>
+    {
+        cors.AddPolicy("AllowAll", policy =>
+        {
+            policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+        });
+    }
+);
 
 var app = builder.Build();
 
