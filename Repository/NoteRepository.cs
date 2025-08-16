@@ -3,6 +3,7 @@ using TheFirstProject.Models;
 using TheFirstProject.Dtos;
 using Microsoft.Data.SqlClient;
 using TheFirstProject.Mappers;
+using TheFirstProject.Utils;
 
 namespace TheFirstProject.Repository;
 
@@ -82,7 +83,7 @@ public class NoteRepository : INoteRepository
         }
         connector.Close();
 
-        throw new KeyNotFoundException($"Note with id {id} not found.");
+        throw new NotFoundException($"Note id {id} is not found!");
     }
 
 
@@ -118,6 +119,7 @@ public class NoteRepository : INoteRepository
     public NoteResponseDTO? Update(int id, NoteRequestDTO request)
     {
         SqlConnection connector = _connector.GetConnection();
+        GetById(id);
         connector.Open();
 
         string queryStr = @"

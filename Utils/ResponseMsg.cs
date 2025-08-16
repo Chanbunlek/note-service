@@ -2,12 +2,27 @@ using System;
 
 namespace TheFirstProject.Utils;
 
-public class ResponseMsg<T>(int Code, bool Status, string Message, T Data)
+public class ResponseMsg<T>
 {
-    public int Code { get; set; } = Code;
-    public bool Status { get; set; } = Status;
-    public string Message { get; set; } = Message;
-    public T Data { get; set; } = Data;
+    public int Code { get; set; }
+    public bool Status { get; set; }
+    public string Message { get; set; }
+    public T? Data { get; set; }
+
+    public ResponseMsg(int Code, bool Status, string Message, T Data)
+    {
+        this.Code = Code;
+        this.Status = Status;
+        this.Message = Message;
+        this.Data = Data;
+    }
+
+    public ResponseMsg(int Code, bool Status, string Message)
+    {
+        this.Code = Code;
+        this.Status = Status;
+        this.Message = Message;
+    }
 
     public static ResponseMsg<T> Ok(T Data)
     {

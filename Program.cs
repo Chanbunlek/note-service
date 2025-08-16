@@ -1,5 +1,6 @@
 using TheFirstProject.DBConnection;
 using TheFirstProject.Repository;
+using TheFirstProject.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,5 +16,6 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
+app.UseMiddleware<ExceptionHandler>();
 
 app.Run();

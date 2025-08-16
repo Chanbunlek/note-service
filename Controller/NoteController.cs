@@ -28,7 +28,6 @@ public class NotesController
     public ActionResult<ResponseMsg<NoteResponseDTO>> GetById(int id)
     {
         var note = _repo.GetById(id);
-        // if (note == null)
         return Responses.Ok(note);
     }
 
